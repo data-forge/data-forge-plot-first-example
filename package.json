@@ -1,0 +1,27 @@
+{
+  "name": "data-forge-plot-first-example",
+  "version": "1.0.0",
+  "description": "A first example of Data-Forge Plot.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/data-forge/data-forge-plot-first-example.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/data-forge/data-forge-plot-first-example/issues"
+  },
+  "homepage": "https://github.com/data-forge/data-forge-plot-first-example#readme",
+  "dependencies": {
+    "data-forge": "^1.0.13",
+    "data-forge-indicators": "^0.1.7",
+    "data-forge-plot": "0.0.15",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
