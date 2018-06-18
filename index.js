@@ -9,28 +9,32 @@ async function main () {
     const url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo&datatype=csv";
     const response = await request(url); // Request the data from Alpha Vantage.
     const df = dataForge.fromCSV(response, { dynamicTyping: true }) // Deserialize CSV data.
-        .parseDates("timestamp", "YYYY-MM-DD") // Parse dates from strings.
-        .setIndex("timestamp"); // Use the data as the index of the dataframe.
+        .parseDates("timestamp", "YYYY-MM-DD"); // Parse dates from strings.
 
     console.log("Retreived:");
-    console.log(df.head(10).toString());
+    console.log(df.head(10).toStrings("timestamp", "YYYY-MM-DD").toString());
 
-    const close = df.getSeries("close"); // Extract the closing price time series.
-    await close.plot() // Plot the closing price to a chart (using default options).
+    const chronoOrder = df.bake().reverse(); // Reverse the data series to put it in forward chronological order.
+    const indexedDf = chronoOrder.setIndex("timestamp"); // Use the date as the index of the dataframe.
+    const close = indexedDf.getSeries("close"); // Extract the closing price time series.
+    await close.plot({}, { series: { __value__: "Microsoft Close" }}) // Plot the closing price to a chart (using default options).
         .renderImage("./MSFT-close.png"); // Render the closing price chart to a PNG file.
 
-    const sma = close.sma(30); // Compute a 30 day simple moving average (using data-forge-indicators);
+    const indexedClose = indexedDf.getSeries("close"); // Extract the closing price time series.
+    const sma = indexedClose.sma(30); // Compute a 30 day simple moving average (using data-forge-indicators);
     console.log("SMA:");
-    console.log(sma.head(10).toString());
+    console.log(sma.head(10).resetIndex().toString());
 
-    const merged = df.withSeries({ SMA: sma }).skip(30); // Merge the sma into the original data.
+    const merged = indexedDf.withSeries({ SMA: sma }); // Merge the sma into the original data.
     console.log("Merged:");
-    console.log(merged.head(10).toString());
+    console.log(merged.skip(30).head(10).resetIndex().toStrings("timestamp", "YYYY-MM-DD").dropSeries("volume").toString());
 
     const plot = merged.plot({}, { y: ["close", "SMA"] }); // Plot a chart with close and SMA on the Y axis.
-    await plot.renderImage("./MSFT-sma.png"); // Render chart to image.
+    await plot.renderImage("./MSFT-sma.png", { openImage: true }); // Render chart to image.
     
-    await plot.exportWeb("./web-export", { overwrite: true }); // Export a web page with the chart and data. Whoa!
+    await plot.exportWeb("./web-export", { overwrite: true, openBrowser: true }); // Export a web page with the chart and data. Whoa!
+
+    await plot.exportNodejs("./nodejs-export", { overwrite: true }); // Export a Node.js project to host our web-based visualization!
 }
 
 
