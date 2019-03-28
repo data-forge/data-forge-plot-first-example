@@ -25,16 +25,13 @@ async function main () {
     console.log("SMA:");
     console.log(sma.head(10).resetIndex().toString());
 
-    const merged = indexedDf.withSeries({ SMA: sma }); // Merge the sma into the original data.
+    const merged = indexedDf.withSeries({ SMA: sma }).skip(30); // Merge the sma into the original data.
     console.log("Merged:");
     console.log(merged.skip(30).head(10).resetIndex().toStrings("timestamp", "YYYY-MM-DD").dropSeries("volume").toString());
 
     const plot = merged.plot({}, { y: ["close", "SMA"] }); // Plot a chart with close and SMA on the Y axis.
-    await plot.renderImage("./MSFT-sma.png", { openImage: true }); // Render chart to image.
-    
+    await plot.renderImage("./MSFT-sma.png", { openImage: true }); // Render chart to image.    
     await plot.exportWeb("./web-export", { overwrite: true, openBrowser: true }); // Export a web page with the chart and data. Whoa!
-
-    await plot.exportNodejs("./nodejs-export", { overwrite: true }); // Export a Node.js project to host our web-based visualization!
 }
 
 
