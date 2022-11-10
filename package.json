@@ -20,7 +20,7 @@
   "dependencies": {
     "data-forge": "^1.6.7",
     "data-forge-indicators": "^0.1.19",
-    "data-forge-plot": "^0.2.4",
+    "data-forge-plot": "^1.0.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   }
