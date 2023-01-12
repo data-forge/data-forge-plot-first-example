@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/data-forge/data-forge-plot-first-example#readme",
   "dependencies": {
-    "data-forge": "^1.6.7",
+    "data-forge": "^1.9.6",
     "data-forge-indicators": "^0.1.19",
     "data-forge-plot": "^0.2.4",
     "request": "^2.88.0",
